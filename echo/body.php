@@ -100,6 +100,7 @@ $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
 //If the request method isn't in our list of allowed methods.
 if(!in_array($requestMethod, $allowedMethods)) {
+    
     //Send a 405 Method Not Allowed header.
     header($_SERVER["SERVER_PROTOCOL"]." 405 Method Not Allowed", true, 405);
     echo "You are using " . $requestMethod . "\r\n";
