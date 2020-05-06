@@ -184,7 +184,7 @@ else {
 
 
 
-            $reply["content"] = $template_array;
+            $reply["content"] = $fixed_array;
             echo json_encode($reply);
         }
 
@@ -204,23 +204,14 @@ else {
             }
 
             else{
-                // header($_SERVER["SERVER_PROTOCOL"]." 404 File Not Found", true, 404);
                 http_response_code(404);
                 header('Content-Type: application/json');
-                // //error message, should be formatted as json?
-                // echo "The requested template does not exist" . "\r\n";
-                // echo "Please go echo/templates.php to get a full list of available templates";
-
-
-                //json response
                 $response = array("response" => 
                                         array("status" => "Not Found",
                                               "code" => http_response_code(),
                                               "message" => "The requested template does not exist. Please go echo/templates.php to get a full list of available templates"));
 
                 echo json_encode($response);
-
-            
             }
         }
     }
