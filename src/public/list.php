@@ -26,10 +26,10 @@ else {
     //remove the ".", "..", and ".DS_Store" from the array
     // $files = array_slice(scandir('templates'), 3); //filesystem dependant and cannot be relied upon. Non-linux systems might not have the dots or a .DS_Store
 
-    // perhaps a better way, but it complicates the result
-    // $files = array_filter(scandir("templates"), function($item) {
-    //     return $item[0] !== '.';
-    // });
+    // removes all files that start with .
+    $files = array_filter(scandir("templates"), function($item) {
+        return $item[0] !== '.';
+    });
 
     // function dir_to_array($dir)
     // {
@@ -84,7 +84,7 @@ else {
     //         return $data;
     // }
     // echo dir_to_json($dir);
-
+    // $x = array("file1","file2","file3","dir1" => array("file1","file2","file3"), "dir2" => array("file1","file2","file3"));
 
 
     header('Content-Type: application/json'); //set header content-type to json

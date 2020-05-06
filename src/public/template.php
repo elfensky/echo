@@ -73,19 +73,17 @@ else {
             //get template file
             $path_relative = $path_relative . ".json";
             $template_file = file_get_contents($path_relative); // print_r($file); echo "\r\n";
-            $template_array = json_decode($template_file, true);
-            // print_r($template_array); echo "\r\n";
+            $template_array = json_decode($template_file, true); // print_r($template_array); echo "\r\n";
 
             //set Content-Type header
             $file_info = new finfo(FILEINFO_MIME_TYPE);
             $mime_type = $file_info->buffer($template_file);
             header('Content-Type: ' . $mime_type);
 
-            //get posted data
-            $received_array = json_decode(file_get_contents("php://input"), true); //this is the received JSON data, converted into an array
-            // print_r($received_array); echo "\r\n";
-
-            //compare arrays and replace values if key exists in template
+            //get posted data //this is the received JSON data, converted into an array
+            $received_array = json_decode(file_get_contents("php://input"), true); // print_r($received_array); echo "\r\n";
+            
+            //-----------TESTING NATIVE BUILT-IN WAYS TO COMPARE ARRAYS & REPLACE VALUES IF KEYS MATCH-----------//
 
             //removes not mentioned keys & adds new keys instead of ignoring them & is not recursive
             // $fixed_array = array_merge($template_array, $received_array); 
@@ -96,38 +94,147 @@ else {
             //adds new keys instead of ignoring them & is not recursive
             // $fixed_array = array_replace_recursive($template_array, $received_array); 
 
-            //is not resurvice in the way I want it to be, as nested keys remain unaffected
-            $fixed_array = array_replace_recursive($template_array, array_intersect_key($received_array, $template_array)); 
-
-            //removes the nested key/value instead of replacing the value
+            // removes the nested key/value instead of replacing the value
             // $fixed_array = array_merge($template_array, array_intersect_key($received_array, $template_array));
 
-            // echo print_r($template_array);
+            // // semi-working PROTOTYPE. is too recursive, and only matches keys if they are on the same recursion. If a key is sent at lvl0 but it's at lvl1 in the template it remains unnaffected
+            // $fixed_array = array_replace_recursive($template_array, array_intersect_key($received_array, $template_array)); 
 
+            // need to write function for this that would automatically fill out the status and message.
+            // $reply = array("response" => array("status" => "OK",
+            // "code" => http_response_code(),
+            // "message" => "Request successfull"),
+            // "content" => "");
 
-            // //gets all keys from a multi-dimensional array and puts them in a one-dimensional array
-            // function array_keys_multi(array $array) {
-            //     $keys = array(); //empty array
+            // $reply["content"] = $fixed_array;
+            // echo json_encode($reply);
 
-            //     foreach ($array as $key => $value) {
-            //         $keys[] = $key;
+            //------------NEW WAY, MANUALLY WRITING THE FUNCTIONS W/ FOREACH/LOOPS------------//
+            
+            //--- PART1: Figure out which keys should be affected ---//
+            //this function gets all keys from a multi-dimensional array and puts them in a one-dimensional array
+            function array_keys_multi(array $array) {
+                $keys = array(); //empty array
 
-            //         if (is_array($value)) {
-            //             $keys = array_merge($keys, array_keys_multi($value));
+                foreach ($array as $key => $value) {
+                    $keys[] = $key;
+
+                    if (is_array($value)) {
+                        $keys = array_merge($keys, array_keys_multi($value));
+                    }
+                }
+
+                return $keys;
+            }
+
+            //creates flat arrays from the template and the received post. 
+            $keys_from_template_array = array_keys_multi($template_array); // print_r(json_encode($keys_from_template_array)); echo "\r\n \r\n";
+            $keys_from_received_array = array_keys_multi($received_array); // print_r(json_encode($keys_from_received_array)); echo "\r\n \r\n";
+            
+            //gets a flat one-dimenstional array of intersection keys.
+            //using this array I can figure out if a key needs to be affected or not.
+            $matching_keys = array_values(array_intersect($keys_from_template_array, $keys_from_received_array)); // print_r(json_encode($matching_keys)); echo "\r\n \r\n";
+            
+            //--- PART2: create an array that contains the to be affected keys and their new values ---//
+            // function get_flat_pairs($array) {
+            //     $arr_flat = array();
+
+            //     if ($array) {
+            //         foreach ($array as $key => $value) {
+
+            //             if (is_array($value)) {
+            //                 // if the value is an array, call itself again
+            //                 get_flat_pairs($value);
+
+            //             } 
+                        
+            //             else {
+            //                 //  Output
+            //                 echo "$value \n";
+            //             }
+            //         }
+            //     }
+            // }
+            
+
+            function displayRecursiveResults($array, $match, $data) {
+                
+
+                foreach($array as $key=>$value) {
+                    
+                    if(is_array($value)) {
+
+                        displayRecursiveResults($value, $match, $data);
+                    
+                    } 
+                    // elseif(is_object($value)) {
+                    
+                    //     displayRecursiveResults($value, $match, $data);
+                    
+                    // } 
+                    else {
+
+                        if(in_array_recursive($key, $match))
+                        {
+                            // this shows correct key-data matching. 
+                            echo $key . " - " . $value;
+                            echo "\r\n";
+
+                            // $data = $data + $temp;
+                            // else{
+                            //     break;
+                            // }
+                            // else{
+                            //     echo "bla";
+                            //     echo "\r\n";
+                            // }
+
+                            // $array[$key] = "posted";
+
+                            $temp[$key] = $value;
+                            $data += $temp;
+                            
+                        }
+                    }         
+                }
+                
+            }
+
+            function in_array_recursive($needle, $haystack, $strict = false) {
+                foreach ($haystack as $item) {
+                    if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
+                        return true;
+                    }
+                }
+            
+                return false;
+            }
+
+            // $value_pair = array();
+            // echo json_encode(array("key1" => "value1", "key2" => "value2")); echo "\r\n";
+            // print_r(json_encode(displayRecursiveResults($received_array, $matching_keys, $value_pair)));
+            
+            // function for_each_value_in_array_unless_nested($haystack) {
+            //     $test_array = [];
+
+            //     foreach($haystack as $key => $value) {
+
+            //         if(is_array($value)) {
+            //             for_each_value_in_array_unless_nested($haystack);
+            //         }
+
+            //         else{
+                        
             //         }
             //     }
 
-            //     return $keys;
+            //     return $test_array;
             // }
-            
-            // //get a flat one-dimensional array of intersecting
-            // $keys_from_template_array = array_keys_multi($template_array);
-            // $keys_from_received_array = array_keys_multi($received_array);
-            
-            // $matching_keys = array_values(array_intersect($keys_from_template_array, $keys_from_received_array));
-            // print_r(json_encode($matching_keys)); echo "\r\n \r\n";
 
-            
+            // print_r(json_encode(for_each_value_in_array_unless_nested($template_array)));
+
+
+
             // print_r(json_encode(aray))
             //array_walk_recursive cannot be used because it only visits leaf nodes. Given some templates may contain a tree of arrays with subarrays, this won't work
             // foreach ($template_array as $value){ 
@@ -176,16 +283,7 @@ else {
             // echo "\r\n \r\n" . json_encode($template_array);
 
 
-            // need to write function for this that would automatically fill out the status and message.
-            $reply = array("response" => array("status" => "OK",
-                                              "code" => http_response_code(),
-                                              "message" => "Request successfull"),
-                            "content" => "");
-
-
-
-            $reply["content"] = $fixed_array;
-            echo json_encode($reply);
+            
         }
 
         else {
