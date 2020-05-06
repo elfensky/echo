@@ -91,19 +91,19 @@
 
 
 //An array of HTTP methods that we want to allow.
-$allowedMethods = array(
+$allowed_methods = array(
     'POST'
 );
 
 //The current request type.
-$requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
+$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
 //If the request method isn't in our list of allowed methods.
-if(!in_array($requestMethod, $allowedMethods)) {
+if(!in_array($request_method, $allowed_methods)) {
     
     //Send a 405 Method Not Allowed header.
     header($_SERVER["SERVER_PROTOCOL"]." 405 Method Not Allowed", true, 405);
-    echo "You are using " . $requestMethod . "\r\n";
+    echo "You are using " . $request_method . "\r\n";
     echo "Only POST is allowed at this endpoint";
     
     //Halt the script's execution.
@@ -112,16 +112,17 @@ if(!in_array($requestMethod, $allowedMethods)) {
 
 else {
     //This will only be executed out if a POST request is used.
-    $contentType = $_SERVER["CONTENT_TYPE"];
+    $content_type = $_SERVER["CONTENT_TYPE"];
 
-    if(strpos($contentType, "multipart/form-data;") !== false)
+    if(strpos($content_type, "multipart/form-data;") !== false)
     {
+        header("Content-Type: application/json");
         print_r(json_encode($_POST + $_FILES)); 
         print_r();
     }
     else
     {
-        header("Content-Type: " . $contentType);
+        header("Content-Type: " . $content_type);
         echo file_get_contents("php://input");
     }
 }
