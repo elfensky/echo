@@ -10,7 +10,7 @@ $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
 //If the request method isn't in our list of allowed methods.
 if (!in_array($requestMethod, $allowedMethods)) {
-
+    
     //set code
     http_response_code(405);
 
@@ -21,9 +21,11 @@ if (!in_array($requestMethod, $allowedMethods)) {
 
     exit; //Halt the script's execution.
 
-} else {
-    $content_type = $_SERVER["CONTENT_TYPE"];
+}
 
+else {
+    $content_type = $_SERVER["CONTENT_TYPE"];
+    
     //test for content_type, and only allow JSON and XML
     //need to rewrite this, anything is pretty much ok? Or should it be only json?
     if (strpos($content_type, 'json') == FALSE && strpos($content_type, 'xml') == FALSE) {
@@ -31,15 +33,19 @@ if (!in_array($requestMethod, $allowedMethods)) {
         // header($_SERVER["SERVER_PROTOCOL"]." 415 Unsupported Media Type", true, 415);
         http_response_code(415);
 
-        if ($content_type == NULL) {
+        if($content_type == NULL){
             $message = "You body empty. You must post something in JSON or XML.";
             generate_json_response($message);
-        } else {
+        }
+        else{
             $message = "You body contains " . "$content_type" . ". Only JSON or XML are allowed.";
             generate_json_response($message);
         }
-    } else {
-        //This will only be executed out if a POST request is used and the content_type is allowed.
+        
+    }
+
+    else {
+         //This will only be executed out if a POST request is used and the content_type is allowed.
 
         $uri_full = explode('/', trim($_SERVER['REQUEST_URI'], '/')); //split full uri into an array
         // foreach ($uri_full_array as $uri_item){echo $uri_item . "\r\n";} echo "\r\n"; //testing $uri_full
@@ -56,50 +62,21 @@ if (!in_array($requestMethod, $allowedMethods)) {
         // echo $path_relative . ".json"; echo "\r\n"; //testing $path_relative
 
         //check if json file exists
-        if (file_exists($path_relative . ".json")) {
+        if(file_exists($path_relative . ".json")) {
 
             //get template file
             $path_relative = $path_relative . ".json";
             $template_file = file_get_contents($path_relative); // print_r($file); echo "\r\n";
             $template_array = json_decode($template_file, true); // print_r($template_array); echo "\r\n";
 
-            //set Content-Type header 
-            //unnneccesary, this is the .json path, it will always be json.
-            // $file_info = new finfo(FILEINFO_MIME_TYPE);
-            // $mime_type = $file_info->buffer($template_file);
-            // header('Content-Type: ' . $mime_type);
-
             //get posted data //this is the received JSON data, converted into an array
             $received_array = json_decode(file_get_contents("php://input"), true); // print_r($received_array); echo "\r\n";
 
-            //-----------TESTING NATIVE BUILT-IN WAYS TO COMPARE ARRAYS & REPLACE VALUES IF KEYS MATCH-----------//
-
-            //removes not mentioned keys & adds new keys instead of ignoring them & is not recursive
-            // $fixed_array = array_merge($template_array, $received_array); 
-
-            //removes not mentioned keys & adds new keys instead of ignoring them & is not recursive
-            // $fixed_array = array_replace($template_array, $received_array); 
-
-            //adds new keys instead of ignoring them & is not recursive
-            // $fixed_array = array_replace_recursive($template_array, $received_array); 
-
-            // removes the nested key/value instead of replacing the value
-            // $fixed_array = array_merge($template_array, array_intersect_key($received_array, $template_array));
-
-            // // semi-working PROTOTYPE. is too recursive, and only matches keys if they are on the same recursion. If a key is sent at lvl0 but it's at lvl1 in the template it remains unnaffected
-            $fixed_array = array_replace_recursive($template_array, array_intersect_key($received_array, $template_array));
-
-            // need to write function for this that would automatically fill out the status and message.
-            $message = "Request successfull";
-            $data = $fixed_array;
-            generate_json_response($message, $data);
-
             //------------NEW WAY, MANUALLY WRITING THE FUNCTIONS W/ FOREACH/LOOPS------------//
-
+            
             //--- PART1: Figure out which keys should be affected ---//
             //this function gets all keys from a multi-dimensional array and puts them in a one-dimensional array
-            function array_keys_multi(array $array)
-            {
+            function array_keys_multi(array $array) {
                 $keys = array(); //empty array
 
                 foreach ($array as $key => $value) {
@@ -116,88 +93,60 @@ if (!in_array($requestMethod, $allowedMethods)) {
             //creates flat arrays from the template and the received post. 
             $keys_from_template_array = array_keys_multi($template_array); // print_r(json_encode($keys_from_template_array)); echo "\r\n \r\n";
             $keys_from_received_array = array_keys_multi($received_array); // print_r(json_encode($keys_from_received_array)); echo "\r\n \r\n";
-
+            
             //gets a flat one-dimenstional array of intersection keys.
             //using this array I can figure out if a key needs to be affected or not.
             $matching_keys = array_values(array_intersect($keys_from_template_array, $keys_from_received_array)); // print_r(json_encode($matching_keys)); echo "\r\n \r\n";
-
+            
             //--- PART2: create an array that contains the to be affected keys and their new values ---//
-            // function get_flat_pairs($array) {
-            //     $arr_flat = array();
+            
+            /* --- SOME ACTUAL LOGICAL THINKING
+            using display_recursive_results() I should be able to generate a new $matched_keys
+            that only has the keys that also exist in the template
 
-            //     if ($array) {
-            //         foreach ($array as $key => $value) {
+            I should then be able to look over every item inside the original array, and 
+            check if the key exists in $matched_keys, and if yes, replace its value with the value of the same key in $matched_keys
+            
+            I should then be able to show the template while keeping it's structure with the new data.
+            */
+            
+            display_recursive_results($received_array, $matching_keys, $value_pair);
 
-            //             if (is_array($value)) {
-            //                 // if the value is an array, call itself again
-            //                 get_flat_pairs($value);
+            //generates a key-value pair of only the key-value pairs that need to be changed
+            function display_recursive_results($array, $match, $data) {
+                foreach($array as $key=>$value) {
+                    
+                    if(is_array($value)) {
+                        display_recursive_results($value, $match, $data);
+                    } 
 
-            //             } 
-
-            //             else {
-            //                 //  Output
-            //                 echo "$value \n";
-            //             }
-            //         }
-            //     }
-            // }
-
-
-            function displayRecursiveResults($array, $match, $data)
-            {
-
-
-                foreach ($array as $key => $value) {
-
-                    if (is_array($value)) {
-
-                        displayRecursiveResults($value, $match, $data);
-                    }
-                    // elseif(is_object($value)) {
-
-                    //     displayRecursiveResults($value, $match, $data);
-
-                    // } 
                     else {
 
-                        if (in_array_recursive($key, $match)) {
+                        if(in_array_recursive($key, $match))
+                        {
                             // this shows correct key-data matching. 
                             echo $key . " - " . $value;
                             echo "\r\n";
-
-                            // $data = $data + $temp;
-                            // else{
-                            //     break;
-                            // }
-                            // else{
-                            //     echo "bla";
-                            //     echo "\r\n";
-                            // }
-
-                            // $array[$key] = "posted";
-
-                            $temp[$key] = $value;
-                            $data += $temp;
                         }
-                    }
+                    }         
                 }
             }
-
-            function in_array_recursive($needle, $haystack, $strict = false)
-            {
+            
+            //this does something, it's 3AM and I don't remember. 
+            function in_array_recursive($needle, $haystack, $strict = false) {
                 foreach ($haystack as $item) {
                     if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
                         return true;
                     }
                 }
-
+            
                 return false;
             }
 
             // $value_pair = array();
             // echo json_encode(array("key1" => "value1", "key2" => "value2")); echo "\r\n";
-            // print_r(json_encode(displayRecursiveResults($received_array, $matching_keys, $value_pair)));
-
+            
+            
             // function for_each_value_in_array_unless_nested($haystack) {
             //     $test_array = [];
 
@@ -208,7 +157,7 @@ if (!in_array($requestMethod, $allowedMethods)) {
             //         }
 
             //         else{
-
+                        
             //         }
             //     }
 
@@ -237,7 +186,7 @@ if (!in_array($requestMethod, $allowedMethods)) {
             //       echo "\r\n";
             //     }
             // }
-
+            
 
             //recursive
             // function edit_array_recursively($arr, $key, $post) {
@@ -249,7 +198,7 @@ if (!in_array($requestMethod, $allowedMethods)) {
             //                 edit_array_recursively($value);
 
             //             } 
-
+                        
             //             else {
             //                 //  Output
             //                 echo "$value \n";
@@ -259,7 +208,7 @@ if (!in_array($requestMethod, $allowedMethods)) {
             // }
 
             // edit_array_recursively($template_array);
-
+              
 
             //show array
             // echo "\r\n \r\n";
@@ -267,10 +216,12 @@ if (!in_array($requestMethod, $allowedMethods)) {
             // echo "\r\n \r\n" . json_encode($template_array);
 
 
+            
+        }
 
-        } else {
+        else {
 
-            if (file_exists($path_relative)) {
+            if(file_exists($path_relative)) {
                 //getfile
                 $template_file = file_get_contents($path_relative);
 
@@ -281,18 +232,20 @@ if (!in_array($requestMethod, $allowedMethods)) {
 
                 //show file
                 echo $template_file;
-            } else {
+            }
+
+            else{
                 http_response_code(404);
                 header('Content-Type: application/json');
-                $response = array("response" =>
-                array(
-                    "status" => "Not Found",
-                    "code" => http_response_code(),
-                    "message" => "The requested template does not exist. Please go echo/templates.php to get a full list of available templates"
-                ));
+                $response = array("response" => 
+                                        array("status" => "Not Found",
+                                              "code" => http_response_code(),
+                                              "message" => "The requested template does not exist. Please go echo/templates.php to get a full list of available templates"));
 
                 echo json_encode($response);
             }
         }
     }
 }
+
+?>
