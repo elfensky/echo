@@ -22,10 +22,12 @@ if(!in_array($request_method, $allowed_methods)) {
 else {
 	//if a path is given, use this path, otherwise use default path.
 	$path = "templates";
+
 	if(isset($_GET["path"])){
 		$path .= DIRECTORY_SEPARATOR . htmlspecialchars($_GET["path"]);
 	}
 
+	//if the specified directory does not exist, show error and stop script
 	if(!is_dir($path))
 	{
 		http_response_code(400);
@@ -35,7 +37,7 @@ else {
 	}
 	
 	//if no mode is selected, it defaults to the most complete reponse possible, showing the full
-	//template/* directory, with all the folders and their contents
+	//file tree, with all the folders and their contents
 	if(!isset($_GET["mode"]))
 	{
 		//test2
@@ -67,13 +69,13 @@ else {
 
 		//generate response
 		$message = "returning complete list of all folders and files in './$path'";
-
 		$data = dir_to_array($path);
 		generate_json_response($message, $data);
 	}
 
 	else if (isset($_GET["mode"]))
 	{
+		//if you're asking it to only show files, it will only show files in specified directory
 		if(htmlspecialchars($_GET["mode"]) == "files")
 		{
 			// echo "show only files";
@@ -111,6 +113,7 @@ else {
 			generate_json_response($message, $data);
 		}
 
+		//if you ask it to show folders, it will show folders in the specified directory (no tree, 1 dimensional)
 		else if (htmlspecialchars($_GET["mode"]) == "folders")
 		{
 			// echo "show only directories";

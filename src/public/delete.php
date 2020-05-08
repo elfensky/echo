@@ -19,11 +19,10 @@ if(!in_array($request_method, $allowed_methods)) {
     $message = "You are using " . $request_method . "\n Only GET is allowed at this endpoint.";
     generate_json_response($message);
 
-
-    exit; //Halt the script's execution.
-}
-
-else {
+	//Halt the script's execution.
+	exit; 
+	
+} else {
 	//getting path & filename from URI
 
     // $uri_full = explode('/', trim($_SERVER['REQUEST_URI'], '/')); //split full uri into an array
@@ -36,7 +35,7 @@ else {
 	$path = htmlspecialchars($_GET["path"]);
 	$file_name = htmlspecialchars($_GET["filename"]);
 	$relative_path = "templates" . DIRECTORY_SEPARATOR . $path;
-	echo $relative_path;
+	// echo $relative_path;
 
     if(!empty($path) || !empty($file_name)) {
 
