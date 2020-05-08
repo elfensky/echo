@@ -34,8 +34,10 @@ if (!in_array($request_method, $allowed_methods)) {
 	exit;
 
 } else {
+	$file = $_FILES["file_upload"];
 
-	if (!empty($_FILES['file_upload'])) {
+	//if a file has been uploaded
+	if (!empty($file['error'] != UPLOAD_ERR_NO_FILE)) {
 		//------GET PATH FROM URI------//
 		// $uri_full = explode('/', trim($_SERVER['REQUEST_URI'], '/')); //split full uri into an array
 		// // foreach ($uri_full_array as $uri_item){echo $uri_item . "\r\n";} echo "\r\n"; //testing $uri_full
@@ -47,8 +49,15 @@ if (!in_array($request_method, $allowed_methods)) {
 
 		//------ GET PATH FROM $_GET ------//
 		$path = htmlspecialchars($_POST["path"]);
-		$file = $_FILES["file_upload"];
-		// echo $file['name']; echo "\r\n";
+		$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+		// echo gettype($ext); echo "\r\n";
+		// echo $ext;echo "\r\n"; echo "\r\n";
+		
+		if(!($ext == "json") || empty($ext)) {
+			$message = "Only .json or extensionless files can be uploaded to this service";
+			generate_json_response($message);
+			exit;
+		}
 		
 		if(empty($path))
 		{
@@ -58,7 +67,6 @@ if (!in_array($request_method, $allowed_methods)) {
 		}
 
 		// echo $relative_path; echo "\r\n";
-
 
 		//------ IF PATH EXISTS, UPLOAD FILE -------//
 		if (is_dir($relative_path)) {
