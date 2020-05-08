@@ -3,10 +3,7 @@
     "key2":"def",
     "key3": {
         "key4": "ghi",
-        "key5": {
-			"key11": "ghi",
-			"key12": "jkl"
-		}
+        "key5": "jkl"
     },
     "key6": {
         "key7": "mno",
