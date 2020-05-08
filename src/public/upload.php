@@ -17,7 +17,7 @@
 
 <?php
 //include response generator
-include '../response.php';
+require '../response.php';
 
 //An array of HTTP methods that we want to allow.
 $allowed_methods = array('POST');
@@ -37,7 +37,7 @@ if (!in_array($request_method, $allowed_methods)) {
 	$file = $_FILES["file_upload"];
 
 	//if a file has been uploaded
-	if (!empty($file['error'] != UPLOAD_ERR_NO_FILE)) {
+	if ($file['error'] != UPLOAD_ERR_NO_FILE) {
 		//------GET PATH FROM URI------//
 		// $uri_full = explode('/', trim($_SERVER['REQUEST_URI'], '/')); //split full uri into an array
 		// // foreach ($uri_full_array as $uri_item){echo $uri_item . "\r\n";} echo "\r\n"; //testing $uri_full

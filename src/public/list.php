@@ -1,5 +1,5 @@
 <?php
-include '../response.php';
+require '../response.php';
 
 //An array of HTTP methods that we want to allow.
 $allowed_methods = array('GET');
