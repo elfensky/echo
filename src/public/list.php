@@ -20,11 +20,10 @@ if(!in_array($request_method, $allowed_methods)) {
 }
 
 else {
-
 	//if a path is given, use this path, otherwise use default path.
 	$path = "templates";
 	if(isset($_GET["path"])){
-		$path .= DIRECTORY_SEPARATOR . $_GET["path"];
+		$path .= DIRECTORY_SEPARATOR . htmlspecialchars($_GET["path"]);
 	}
 
 	if(!is_dir($path))
@@ -75,7 +74,7 @@ else {
 
 	else if (isset($_GET["mode"]))
 	{
-		if($_GET["mode"] == "files")
+		if(htmlspecialchars($_GET["mode"]) == "files")
 		{
 			// echo "show only files";
 
@@ -112,7 +111,7 @@ else {
 			generate_json_response($message, $data);
 		}
 
-		else if ($_GET["mode"] == "folders")
+		else if (htmlspecialchars($_GET["mode"]) == "folders")
 		{
 			// echo "show only directories";
 
