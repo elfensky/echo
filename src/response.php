@@ -88,7 +88,7 @@ function generate_json_response($message = NULL, $data = NULL) {
                       "message" => $message);
 
     
-    echo json_encode($json_as_array = array("response" => $response, "echo" => $data));
+    echo json_encode(array("response" => $response, "echo" => $data), JSON_FORCE_OBJECT);
 }
 
 // generate_json_response();

@@ -1,6 +1,6 @@
 <?php
 //include response generator
-include 'response.php';
+include '../response.php';
 
 //An array of HTTP methods that we want to allow.
 $allowed_methods = array('POST');
