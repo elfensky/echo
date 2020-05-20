@@ -8,7 +8,7 @@ should not be accessed directly, but if accessed will remain inert
 A helper function that's included with every microservice and generates a proper json response for any possible need. 
 The function is called **generate_json_response($message, $data);**  both both variables being optional and defaulting to NULL. 
 
-A response is provided in the following format:
+A response is provided in the following format:  
 ```
 {
     "response": {
