@@ -1,0 +1,63 @@
+/* bootstrap override */
+.badge-pill{
+	margin-right: 0.6rem;
+}
+
+.badge-secondary{
+	background-color: #E8E8E8 !important;
+	color: black;
+}
+/* datatables override */
+.dataTables_filter{
+	display: none;
+}
+
+
+
+
+
+/* CUSTOM SORT ICONS */
+
+/* dataTables CSS modification & positioning */
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:before {
+  right: 0 !important;
+  content: "" !important;
+}
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+  right: 0 !important;
+  content: "" !important;
+}
+table.dataTable thead th {
+    position: relative;
+    background-image: none !important;
+}
+  
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    position: absolute !important;
+    top: 12px !important;
+    right: 8px !important;
+    display: block !important;
+    font-family: 'Font Awesome 5 Pro' !important;
+}
+table.dataTable thead th.sorting:after {
+    content: "\f15e" !important;
+    color: #ddd !important;
+    font-size: 0.8em !important;
+    padding-top: 0.12em !important;
+}
+table.dataTable thead th.sorting_asc:after {
+    content: "\f15e" !important;
+}
+table.dataTable thead th.sorting_desc:after {
+    content: "\f881" !important;
+}

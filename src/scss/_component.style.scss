@@ -1,0 +1,101 @@
+.c-header{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 60px;
+	position: relative;
+	z-index: 9;
+
+	&__title{
+		display: flex; 
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		font-family: 'Font Awesome 5 Pro', Roboto;
+
+		// &::after{
+		// 	font-size: 1.4rem;
+		// 	font-family: 'Font Awesome 5 Pro';
+		// 	content: "\f044";
+		// }
+	}
+}
+
+.c-filter{
+	/* height: min-content; */
+	opacity: 1;
+	transition: 0.333s all ease-in-out;
+	/* transform:translate(0); */
+
+	&--hidden{
+		opacity: 0;
+		overflow: hidden;
+	}
+
+	&__input input{
+		background-color: #E8E8E8;
+		text-shadow: none;
+		border: none;
+		padding: 0.5rem;
+		margin-right: 2rem;
+	}
+
+	&__input{
+
+		&--template{
+		min-width: 300px;
+		}
+	}
+
+	&__badges{
+		display: flex;
+		flex-direction: row;
+		/* margin-right: 1rem; */
+	}
+
+	&__badgesection{
+		margin-top: 2rem;
+		margin-right: 3rem;
+	}
+}
+
+.c-table{
+	&__actions{
+	/* visibility: hidden; */
+	opacity: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+	transition: 0.2s all;
+	}
+
+	&__row:hover > td .c-table__actions{
+		opacity: 1;
+	}
+}
+
+
+.c-metadata{
+	max-width: 270px;
+	padding: 2rem;
+	
+	&__section{
+		margin-top: 1.4rem;
+	}
+
+	&__subtitle{
+		font-size: 1.1rem;
+		font-weight: 300;
+		margin-bottom: 0.6rem;
+	}
+
+	&__author{
+		// width: 100%;
+		font-family: 'Font Awesome 5 Pro', Roboto;
+		padding: 0.5rem 0.25rem;
+		padding-left: 0.75rem;
+		// font-weight: 600;
+	}
+}

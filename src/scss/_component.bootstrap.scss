@@ -1,0 +1,13 @@
+/* bootstrap override */
+.badge-pill{
+	margin-right: 0.6rem;
+}
+
+.badge-secondary{
+	background-color: #E8E8E8 !important;
+	color: black;
+}
+/* datatables override */
+.dataTables_filter{
+	display: none;
+}

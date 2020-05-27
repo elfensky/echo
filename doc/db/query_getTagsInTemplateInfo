@@ -1,0 +1,6 @@
+SELECT id, template_name, author, GROUP_CONCAT(department.department_name) AS tags
+FROM template_info INNER JOIN templates_departments 
+ON template_info.id=templates_departments.template_id 
+INNER JOIN department 
+ON department.id=templates_departments.department_id 
+GROUP BY template_info.id;

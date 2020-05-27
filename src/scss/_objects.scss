@@ -1,0 +1,18 @@
+.o-main{
+	background-color: rgb(221, 221, 221);
+	min-height: 100vh;
+	padding: 0 6rem;
+}
+
+.o-section{
+	background-color: #FFF;
+
+	margin-top: 3rem;
+	padding: 2rem;
+
+	&__title{
+		font-size: 1.8rem;
+		font-weight: 400;
+	}
+}
+
