@@ -47,6 +47,6 @@
 	<script type="text/javascript" src="../js/datatables.js"></script>
 	<script type="text/javascript" src="../js/filter_toggle.js"></script>
 	<script type="text/javascript" src="../js/pills.js"></script>
-	<script type="text/javascript" src="../js/clear_inputs_on_reload.js"></script>
+	<!-- <script type="text/javascript" src="../js/clear_inputs_on_reload.js"></script> -->
 </body>
 </html>

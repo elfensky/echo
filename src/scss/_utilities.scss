@@ -21,3 +21,16 @@
 // 	padding: 0.25rem;
 // 	border-radius: 0.4rem;
 // }
+
+.u-version{
+	text-align: center;
+	background-color: white;
+	border: 1px solid gray;
+	border-radius: 0.5rem;
+	min-width: 2rem;
+
+	&--dot{
+		text-align: center;
+		margin: 0 0.2rem;
+	}
+}

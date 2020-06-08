@@ -46,6 +46,7 @@
 			<div class="c-filter__input">
 				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--template" type="text" id="search_by_name" placeholder="&#xF002; Template name">
 				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--author" type="text" id="search_by_author" placeholder="&#xF007;  Author">
+				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--department" type="text" id="search_by_department" placeholder="Department">
 			</div>
 			
 			<div class="c-filter__badges">
@@ -74,8 +75,9 @@
 					<tr>
 						<th>#</th>
 						<th>Template</th>
-						<th>Tags</th>
+						<th>Departments</th>
 						<th>Author</th>
+						<th>Version</th>
 						<!-- <th>Type</th> -->
 						<!-- <th>Version</th> -->
 						<th></th>
@@ -94,7 +96,7 @@
 						// 							ON department.id = templates_departments.department_id 
 						// 							GROUP BY template_info.id');
 
-						$res = $db->query('SELECT t.id, t.template_name, t.author, GROUP_CONCAT(d.department_name) AS tags 
+						$res = $db->query('SELECT t.id, t.template_name, t.author, t.last_version, GROUP_CONCAT(d.department_name) AS tags 
 											FROM template_info AS t INNER JOIN templates_departments  AS td 
 											ON t.id = td.template_id 
 											INNER JOIN department as d 
@@ -109,7 +111,7 @@
 
 							echo "<tr class='c-table__row'>
 									<td></td>
-									<td><a href='request.php?id=" . $row['id'] . "'>{$row['template_name']}</a></td>
+									<td><a href='template.php?id=" . $row['id'] . "'>{$row['template_name']}</a></td>
 									<td>";
 							
 							foreach ($tags_array as $tag) {
@@ -118,6 +120,7 @@
 										
 							echo   "</td>
 									<td>{$row['author']}</td>
+									<td>" . long2ip($row['last_version']) . "</td>
 									<td>
 										<div class='c-table__actions'>
 										<a href='template.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i></a>
@@ -135,7 +138,8 @@
 
 	<script type="text/javascript" src="../js/datatables.js"></script>
 	<script type="text/javascript" src="../js/filter_toggle.js"></script>
-	<script type="text/javascript" src="../js/pills.js"></script>
+	<script type="text/javascript" src="../js/pills_filter.js"></script>
 	<script type="text/javascript" src="../js/clear_inputs_on_reload.js"></script>
+	<script type="text/javascript" src="../js/delete__template.js"></script>
 </body>
 </html>

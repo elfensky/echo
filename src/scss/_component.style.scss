@@ -27,7 +27,8 @@
 	opacity: 1;
 	transition: 0.333s all ease-in-out;
 	/* transform:translate(0); */
-
+	margin: 3rem 0; 
+	
 	&--hidden{
 		opacity: 0;
 		overflow: hidden;
@@ -79,23 +80,60 @@
 
 .c-metadata{
 	max-width: 270px;
-	padding: 2rem;
+	// padding: 2rem;
 	
 	&__section{
 		margin-top: 1.4rem;
+		// display: flex;
+		// flex-direction: column;
 	}
 
 	&__subtitle{
 		font-size: 1.1rem;
 		font-weight: 300;
 		margin-bottom: 0.6rem;
+		display: flex;
 	}
 
 	&__author{
-		// width: 100%;
+		width: 100%;
 		font-family: 'Font Awesome 5 Pro', Roboto;
 		padding: 0.5rem 0.25rem;
 		padding-left: 0.75rem;
 		// font-weight: 600;
 	}
+
+	&__version{
+		display: flex;
+		width: 100%;
+
+		input{
+			height: 1.4rem;
+			flex-grow: 1;
+		}
+	}
+
+	&__department, &__type{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	&__description{
+		textarea{
+			width: 100%;
+			border:none;
+			text-decoration: none;
+			padding: 0.25rem 0.5rem;
+		}
+	}
 }
+
+
+
+//JSON
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
