@@ -1,0 +1,415 @@
+/*------------------------------------*\
+  #SETTINGS
+\*------------------------------------*/
+/*------------------------------------*\
+  #TOOLS 
+\*------------------------------------*/
+/*------------------------------------*\
+  #GENERICS
+\*------------------------------------*/
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default padding */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+figure,
+blockquote,
+dl,
+dd,
+article {
+  margin: 0;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Make images easier to work with */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Natural flow and rhythm in articles by default */
+article > * + * {
+  margin-top: 0;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/*------------------------------------*\
+  #ELEMENTS
+\*------------------------------------*/
+body {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+}
+
+input {
+  max-width: 100%;
+}
+
+tr {
+  position: relative;
+}
+
+/*------------------------------------*\
+  #OBJECTS
+\*------------------------------------*/
+.o-main {
+  background-color: lightgray;
+}
+
+.o-container {
+  max-width: 90%;
+  margin: auto;
+  min-height: 100vh;
+}
+
+.o-section__title {
+  font-size: 1.5rem;
+  margin: 1rem;
+}
+.o-section__buttons {
+  position: absolute;
+  right: 0;
+  background-color: none;
+  top: -3.375rem;
+  display: flex;
+  flex-direction: row;
+}
+.o-section__buttons a, .o-section__buttons button {
+  margin-left: 1rem;
+}
+.o-section__content {
+  margin: 1rem;
+}
+.o-section__access {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.o-heading {
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  margin-bottom: 4.125rem;
+}
+.o-heading h1, .o-heading h3, .o-heading p {
+  margin-bottom: 0.375rem;
+}
+.o-heading__item {
+  text-decoration: none;
+  background-color: lightgray;
+  border: none;
+  height: min-content;
+}
+.o-heading__input {
+  width: 66%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+}
+.o-heading__input input {
+  flex-grow: 1;
+  background-color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.375rem;
+}
+.o-heading__pill {
+  margin-right: 0.375rem;
+  font-size: 0.8rem;
+}
+.o-heading--index {
+  margin-bottom: 1rem;
+}
+
+.o-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+}
+
+.o-table {
+  max-width: 66%;
+  width: 66%;
+  background-color: white;
+  position: relative;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+.o-table__row__key {
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+.o-preview {
+  width: 34%;
+  height: 100%;
+  flex-grow: 1;
+  background-color: rgba(255, 255, 255, 0.66);
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.o-footer {
+  padding-top: 75px;
+  padding-bottom: 25px;
+  font-size: 0.5rem;
+  background-color: #323232;
+  color: white;
+  text-align: center;
+}
+
+/*------------------------------------*\
+  #COMPONENTS
+\*------------------------------------*/
+.string {
+  color: green;
+}
+
+.number {
+  color: darkorange;
+}
+
+.boolean {
+  color: blue;
+}
+
+.null {
+  color: magenta;
+}
+
+.key {
+  color: red;
+}
+
+body, h1, h2, h3, input {
+  font-family: "Font Awesome 5 Pro", Roboto, Arial;
+}
+
+.c-filter__input--template {
+  max-width: 350px;
+  margin-right: 1rem;
+}
+.c-filter__input--author {
+  max-width: 250px;
+  margin-right: 1rem;
+}
+
+.c-table th, .c-table td {
+  vertical-align: middle;
+}
+.c-table__actions {
+  opacity: 0;
+}
+.c-table__actions--delete {
+  color: red;
+}
+.c-table__actions--delete:hover {
+  color: darkred;
+}
+.c-table__row:hover > td .c-table__actions {
+  opacity: 1;
+}
+.c-table__checkbox input[type=checkbox], .c-table__checkbox .c-table__checkbox .checked {
+  display: none;
+}
+.c-table__span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+}
+
+.c-filter {
+  margin: 0;
+}
+.c-filter__input input {
+  background-color: white;
+  padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  border: none;
+}
+
+.dataTables_filter, .dataTables_length {
+  display: none;
+}
+
+.dataTables_info {
+  float: left;
+  padding: 0.75rem !important;
+}
+
+.dataTables_paginate {
+  float: right;
+  padding: 0.75rem !important;
+}
+.dataTables_paginate a {
+  border: none !important;
+  border-radius: 0.25rem;
+  color: #007bff !important;
+  padding: 0.1rem 0.5rem !important;
+  transition: 0.2s ease-in-out;
+}
+.dataTables_paginate a:hover {
+  color: white !important;
+  padding: 0.1rem 0.5rem !important;
+  background: #007bff !important;
+}
+.dataTables_paginate .disabled:hover {
+  background: transparent !important;
+}
+.dataTables_paginate .current {
+  pointer-events: none;
+  background: none !important;
+  border: none !important;
+  color: #323232 !important;
+}
+.dataTables_paginate .current:hover {
+  color: #323232 !important;
+  background: transparent !important;
+}
+
+/*------------------------------------*\
+  #UTILITIES
+\*------------------------------------*/
+.u-nofa option {
+  font-family: Roboto, Arial;
+}
+
+.u-100 {
+  width: 100%;
+  max-width: 100%;
+}
+
+.u-select {
+  width: min-content;
+  line-height: 0;
+}
+
+.u-collapse {
+  width: 1rem;
+  transform: translateX(-0.5rem);
+}
+
+.u-hidden {
+  display: none;
+}
+
+.u-checkbox {
+  margin-bottom: 0;
+}
+
+.u-checkbox input[type=checkbox],
+.u-checkbox .checked {
+  display: none;
+}
+
+.u-checkbox input[type=checkbox]:checked ~ .checked {
+  display: inline-block;
+}
+
+.u-checkbox input[type=checkbox]:checked ~ .unchecked {
+  display: none;
+}
+
+.u-controls {
+  z-index: 999;
+}
+
+.u-addrow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: gray;
+  color: white;
+  font-size: 0.9rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 1.5rem;
+  position: absolute;
+  right: -0.55rem;
+  bottom: -0.55rem;
+  z-index: 999;
+}
+.u-addrow:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.u-removerow {
+  z-index: 999;
+}
+.u-removerow:hover {
+  color: red;
+}
+
+.u-pill {
+  margin-right: 0.375rem;
+}
+.u-pill span {
+  margin-left: 0.375rem;
+  font-family: Roboto, Arial;
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,122 @@
+//FONT-AWESOME
+body, h1,h2,h3, input{
+	font-family: 'Font Awesome 5 Pro', Roboto, Arial;
+}
+
+.c-filter{
+	&__input{
+		&--template{
+			max-width: 350px;
+			margin-right: 1rem;
+		}
+
+		&--author{
+			max-width: 250px;
+			margin-right: 1rem;
+		}
+	}
+}
+
+.c-table{
+	th, td{
+		vertical-align: middle;
+	}
+
+	&__actions{
+		opacity: 0;
+		&--delete{
+			color:red;
+			&:hover{
+				color: darkred;
+			}
+		}
+	}
+
+	&__row:hover > td .c-table__actions{
+		opacity: 1;
+	}
+
+	&__checkbox{
+		input[type="checkbox"], .c-table__checkbox .checked{
+			display:none;
+		}
+	}
+
+	&__span{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: end;
+	}
+}
+
+.c-filter{
+	margin: 0;
+	&__input{
+		// margin-bottom: 1rem;
+		
+		input{
+			background-color: $color__table;
+			padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+			border-radius: $border-radius;
+			border: none;
+		}
+	}
+}
+
+// .c-edit{
+// 	&__heading{
+// 		&__input{
+// 			background-color: white;
+// 		}
+// 	}
+// }
+
+
+//override
+.dataTables_filter, .dataTables_length{
+	display:none;
+}
+
+.dataTables_info{
+	float:left;
+	padding: 0.75rem !important;
+}
+.dataTables_paginate{
+	float:right;
+	padding: 0.75rem !important;
+
+	a{
+		border:none !important;
+		border-radius: $border-radius;
+		color: $color__link !important;
+		padding: 0.1rem 0.5rem !important;
+		transition: 0.2s ease-in-out;
+
+		&:hover{
+			color: $color__table !important;
+			padding: 0.1rem 0.5rem !important;
+			// color:#0069d9 !important;
+			background: $color__link !important;
+		}
+	}
+
+	.disabled{
+		&:hover{
+			background:transparent !important;
+		}
+	}
+	.current{
+		pointer-events: none;
+		background: none !important;
+		border: none !important;
+		color: $color__text !important; 
+
+		&:hover{
+			color: $color__text !important;
+			background:transparent !important;
+			// background-color:red !important;
+		}
+	}
+}
+

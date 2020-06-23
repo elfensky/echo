@@ -1,0 +1,18 @@
+//ELEMENTS
+//no classes or ids, only pure html elements go here.
+
+//Elements 
+//styling for bare HTML elements (like H1, A, etc.). 
+//These come with default styling from the browser so we can redefine them here.
+body{
+	font-family: Roboto, sans-serif;
+	font-size: 16px;
+}
+
+input{
+	max-width: 100%;
+}
+
+tr{
+	position: relative;
+}
