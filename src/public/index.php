@@ -8,7 +8,7 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
 
 	<!-- jquery-3 -->
-	<script src="../js/jquery-3.5.1.min.js"></script>
+	<script src="../dependencies/jquery/3.5.1.min.js"></script>
 
 	<!-- datatables -->
 	<link rel="stylesheet" type="text/css" href="../dependencies/datatables/datatables.min.css"/>
@@ -23,123 +23,118 @@
 
 	<!-- custom styles, need to change to sass but later -->
 	<link rel="stylesheet" href="../css/style.css">
-	<link rel="stylesheet" href="../css/override.css">
+	<!-- <link rel="stylesheet" href="../css/override.css"> -->
 </head>
 <body>
-	<div class="container-fluid o-main">
-		
-		<div class="c-header">
-			<div class="c-header__title">
-				<h1>Browse Templates</h1>
-			</div>
-			<div class="c-header__buttons">
-				<div>
-					<button id="btn_filter" class="btn btn-primary"><i class="far fa-filter"></i></button>
-					<a href="template.php?id=0" style="margin-left: 2rem;" class="btn btn-primary"><i class="far fa-file-plus"></i> New Template</a>
-				</div>
-			</div>
-		</div>
+	<div class="o-main">
+		<div class="o-container">
 
-		<div id="filter" class="o-section c-filter">
-			<h2 class="c-filter__title">Filter</h2>
+			<div class="o-heading o-heading--index">
+				<!-- <h1 class="o-heading__title">Browse Templates</h1> -->
 
-			<div class="c-filter__input">
-				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--template" type="text" id="search_by_name" placeholder="&#xF002; Template name">
-				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--author" type="text" id="search_by_author" placeholder="&#xF007;  Author">
-				<input style="font-family: Roboto, 'Font Awesome 5 Pro'" class="c-filter__input--department" type="text" id="search_by_department" placeholder="Department">
-			</div>
-			
-			<div class="c-filter__badges">
-				<div class="c-filter__badgesection">
-					<h3>Departments</h3>
-					<button id="btn_all" class="btn badge badge-pill badge-primary">All <i class="fal fa-minus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_dep">dico <i class="fal fa-plus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_dep">dios <i class="fal fa-plus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_dep">dist <i class="fal fa-plus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_dep">dipo <i class="fal fa-plus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_dep">dise <i class="fal fa-plus"></i></button>
+				<div id="filter" class="o-section c-filter">
+					<!-- <h2 class="c-filter__title">Filter</h2> -->
+
+					<div class="c-filter__input">
+						<input class="c-filter__input--template" type="text" id="search_by_name" placeholder="&#xF002; Template name">
+						<input class="c-filter__input--author" type="text" id="search_by_author" placeholder="&#xF007;  Author">
+						<!-- <input class="c-filter__input--department" type="text" id="search_by_department" placeholder="Department"> -->
+						<!-- <div class="dataTables_length" id="templates_length"><label>Show <select name="templates_length" aria-controls="templates" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div> -->
+					</div>
+					
+					<!-- <div class="c-filter__badges">
+						<div class="c-filter__badgesection">
+							<button id="btn_all" class="btn badge badge-pill badge-primary">All <i class="fal fa-minus"></i></button>
+							<button class="btn badge badge-pill badge-secondary btn_dep">dico <i class="fal fa-plus"></i></button>
+							<button class="btn badge badge-pill badge-secondary btn_dep">dios <i class="fal fa-plus"></i></button>
+							<button class="btn badge badge-pill badge-secondary btn_dep">dist <i class="fal fa-plus"></i></button>
+							<button class="btn badge badge-pill badge-secondary btn_dep">dipo <i class="fal fa-plus"></i></button>
+							<button class="btn badge badge-pill badge-secondary btn_dep">dise <i class="fal fa-plus"></i></button>
+						</div>
+					</div> -->
 				</div>
 
-				<div class="c-filter__badgesection">
-					<h3>Type</h3>
-					<button class="btn badge badge-pill badge-secondary btn_type">post <i class="fal fa-plus"></i></button>
-					<button class="btn badge badge-pill badge-secondary btn_type">get <i class="fal fa-plus"></i></button>
-				</div>
 			</div>
-		</div>
 
-		<div class="table-responsive o-section c-table ">
+			<div class="o-wrapper">
 
-			<table class="table table-hover" id="templates" class="display">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Template</th>
-						<th>Departments</th>
-						<th>Author</th>
-						<th>Version</th>
-						<!-- <th>Type</th> -->
-						<!-- <th>Version</th> -->
-						<th></th>
-					</tr>
-				</thead>
+				<div class="o-section o-table u-100">
+					<div class="o-section__buttons">
 
-				<tbody>
-
-					<?php 
-						$db = new SQLite3('../db/echo.sqlite', SQLITE3_OPEN_READWRITE);
-						
-						// $res = $db->query('SELECT id, template_name, author, GROUP_CONCAT(department.department_name) AS tags 
-						// 							FROM template_info INNER JOIN templates_departments 
-						// 							ON template_info.id = templates_departments.template_id 
-						// 							INNER JOIN department 
-						// 							ON department.id = templates_departments.department_id 
-						// 							GROUP BY template_info.id');
-
-						$res = $db->query('SELECT t.id, t.template_name, t.author, t.last_version, GROUP_CONCAT(d.department_name) AS tags 
-											FROM template_info AS t INNER JOIN templates_departments  AS td 
-											ON t.id = td.template_id 
-											INNER JOIN department as d 
-											ON d.id= td.department_id 
-											GROUP BY t.id');
-						
-						// $res = $db->query('SELECT id, template_name, author FROM template_info');
-						// print_r($res->fetchArray());
-
-						while ($row = $res->fetchArray()) {
-							$tags_array = explode(',', $row['tags']);
-
-							echo "<tr class='c-table__row'>
-									<td></td>
-									<td><a href='template.php?id=" . $row['id'] . "'>{$row['template_name']}</a></td>
-									<td>";
+						<div style="display:flex;flex-direction:row;align-items:center;">
 							
-							foreach ($tags_array as $tag) {
-								echo "<span class='badge badge-pill badge-primary pill--$tag'>$tag</span>";
-							}
-										
-							echo   "</td>
-									<td>{$row['author']}</td>
-									<td>" . long2ip($row['last_version']) . "</td>
-									<td>
-										<div class='c-table__actions'>
-										<a href='template.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i></a>
-										<a style='color:red;' href='delete.php?id=" . $row['id'] . "'><i class='fas fa-trash'></i></a>
-										</div>
-									</td>
-									</tr>";
-						}
-					?>
-				</tbody>
-			</table>
-						<?php // echo "test";  ?>
+							<select class="custom-select" id="templates_length" name="templates_length" aria-controls="templates">
+								<option value="10">10 Rows</option>
+								<option value="25">25 Rows</option>
+								<option value="50" selected="selected">50 Rows</option>
+								<option value="-1">All Rows</option>
+							</select>
+							<!-- Rows -->
+						</div> 
+
+						<a href="new.php" style="margin-left: 2rem;" class="btn btn-primary"><i class="far fa-file-plus"></i> New Template</a>
+					</div>
+
+					<table class="table table-hover" id="templates" class="display">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Template</th>
+								<th>Departments</th>
+								<th>Last Modified By</th>
+								<th>Versions</th>
+								<!-- <th>Type</th> -->
+								<!-- <th>Version</th> -->
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<?php 
+								$db = new SQLite3('../db/echo.sqlite', SQLITE3_OPEN_READWRITE);
+								
+								$res = $db->query('SELECT t.info_id, t.template_name, t.last_modified_by, t.versions, GROUP_CONCAT(d.department_name) AS tags 
+													FROM template_info AS t INNER JOIN templates_departments  AS td 
+													ON t.info_id = td.template_id 
+													INNER JOIN department as d 
+													ON d.id= td.department_id 
+													GROUP BY t.info_id');
+
+								while ($row = $res->fetchArray()) {
+									$tags_array = explode(',', $row['tags']);
+
+									echo "<tr class='c-table__row'>
+											<td></td>
+											<td><a href='view.php?id=" . $row['info_id'] . "'>{$row['template_name']}</a></td>
+											<td>";
+									
+									foreach ($tags_array as $tag) {
+										echo "<span class='badge badge-pill badge-primary pill--$tag'>$tag</span>";
+									}
+												
+									echo   "</td>
+											<td>{$row['last_modified_by']}</td>
+											<td>" . $row['versions'] . "</td>
+											<td>
+												<div class='c-table__actions'>
+													<a class='c-table__actions--delete' href='../php/delete.php?id=" . $row['info_id'] . "'><i class='fas fa-trash'></i></a>
+												</div>
+											</td>
+										</tr>";
+								}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
+
+		<footer class="o-footer">
+			© 2020 Andrei lavrenov
+		</footer>
 	</div>
 
 	<script type="text/javascript" src="../js/datatables.js"></script>
-	<script type="text/javascript" src="../js/filter_toggle.js"></script>
-	<script type="text/javascript" src="../js/pills_filter.js"></script>
-	<script type="text/javascript" src="../js/clear_inputs_on_reload.js"></script>
-	<script type="text/javascript" src="../js/delete__template.js"></script>
 </body>
 </html>

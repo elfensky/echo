@@ -1,3 +1,24 @@
-//SETTINGS
-//only $variables come here. Fonts, Colors and other values. 
-//read more on https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
+//FONT WEIGHTS
+$black: 900;
+$extra-bold: 800;
+$bold: 700;
+$semi-bold: 600;
+$medium: 500;
+$regular: 400;
+$light: 300;
+$extra-light: 200;
+$thin: 100;
+
+//FONTS
+$font: $regular 16px 'Font Awesome 5 Pro', Roboto, sans-serif, Arial;
+$font-family: Roboto, Arial;
+$font-family__awesome: 'Font Awesome 5 Pro', Roboto, Arial;
+
+//COLORS
+$color__text: #323232;
+$color__table: white;
+$color__preview: rgba(255,255,255,0.66);
+$color__background: lightgray;
+$color__link: #007bff;
+
+$border-radius: 0.25rem;

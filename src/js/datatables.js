@@ -1,7 +1,11 @@
+//initialize and start the datatables library
 $(document).ready( function () {
 
 	var table = $('#templates').DataTable({
-			"pageLength": 20,
+			// "bFilter" : false,               
+			// "bLengthChange": false,
+			// "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+			"pageLength": 50,
 			"columnDefs": [ {
 					"searchable": false,
 					"orderable": false,
@@ -12,20 +16,25 @@ $(document).ready( function () {
 			// bFilter: false
 	});
 
-	//custom search for template_name
+	//custom search for template_name https://datatables.net/reference/api/search()
 	$('#search_by_name').on('keyup', function () {
 		table.column(1).search($('#search_by_name').val()).draw();
 	});
 
-	//custom search for authors
+	// //custom search for authors https://datatables.net/reference/api/search()
 	$('#search_by_author').on('keyup', function () {
 		table.column(3).search($('#search_by_author').val()).draw();
 	});
 
-	//custom search for departments
-	$('#search_by_department').on('keyup', function () {
-		table.column(2).search($('#search_by_department').val()).draw();
-	});
+	// //custom search for departments https://datatables.net/reference/api/search()
+	// $('#search_by_department').on('keyup', function () {
+	// 	table.column(2).search($('#search_by_department').val()).draw();
+	// });
+
+	//custom rows-per-page selector. See https://datatables.net/reference/api/page.len()
+	$('#templates_length').change(function() {
+		table.page.len(this.value).draw();
+	})
 
 	//generated counter_columns https://datatables.net/examples/api/counter_columns.html 
 	table.on( 'order.dt search.dt', function () {

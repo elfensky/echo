@@ -26,9 +26,11 @@
   #COMPONENTS
 \*------------------------------------*/
 //home page
-@import 'component.bootstrap';
-@import 'component.datatables';
-@import 'component.style'; 
+@import 'component.json';
+@import 'component.style';
+
+// @import 'component.datatables';
+// @import 'component.style'; 
 
 /*------------------------------------*\
   #UTILITIES
