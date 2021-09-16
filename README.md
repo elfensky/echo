@@ -1,6 +1,6 @@
 # Echo Service Documentation
 
-# Release notes // V1.0
+# Release notes // V1.1
 
 This is a service that provides mock API data based on specified templates. The current version has the following features
 
